@@ -47,7 +47,10 @@ class AddDataScreen extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PhotoCaptureScreen()));
+                          builder: (context) => PhotoCaptureScreen(
+                                cName: commonName.text,
+                                sName: scientificName.text,
+                              )));
                 }
               },
               child: Text('Next'),

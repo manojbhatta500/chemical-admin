@@ -1,5 +1,5 @@
-import 'package:apiadmin/bloc/post_chemical_data_bloc.dart';
-import 'package:apiadmin/pages/add_data.dart';
+import 'package:apiadmin/blocs/signin/sign_in_bloc.dart';
+import 'package:apiadmin/pages/signin_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -12,15 +12,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => PostChemicalDataBloc(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => SignInBloc(),
+        ),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: AddDataScreen(),
+        home: SignInScreen(),
       ),
     );
   }
 }
-
-
-// changed

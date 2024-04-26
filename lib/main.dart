@@ -1,3 +1,5 @@
+import 'package:apiadmin/blocs/create_category/create_catogery_bloc.dart';
+import 'package:apiadmin/blocs/fetch_category/fetch_category_cubit.dart';
 import 'package:apiadmin/blocs/signin/sign_in_bloc.dart';
 import 'package:apiadmin/pages/signin_page.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +18,12 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => SignInBloc(),
+        ),
+        BlocProvider(
+          create: (context) => FetchCategoryCubit(),
+        ),
+        BlocProvider(
+          create: (context) => CreateCatogeryBloc(),
         ),
       ],
       child: MaterialApp(

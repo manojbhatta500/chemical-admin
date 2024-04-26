@@ -1,4 +1,9 @@
+import 'dart:developer';
+
+import 'package:apiadmin/blocs/create_category/create_catogery_bloc.dart';
+import 'package:apiadmin/pages/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddCategory extends StatelessWidget {
   final TextEditingController _categoryNameController = TextEditingController();
@@ -24,9 +29,32 @@ class AddCategory extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20.0),
-            ElevatedButton(
-              onPressed: () {},
-              child: Text('Create'),
+            BlocListener<CreateCatogeryBloc, CreateCatogeryState>(
+              listener: (context, state) {
+                switch (state.runtimeType) {
+                  case CreateCatogeryFailed:
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Unable to Create Category.')));
+                  case CreateCatogeryLoading:
+                    log('this is loading state');
+
+                  case CreateCatogerySuccess:
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HomePage()));
+
+                  default:
+                    log('this is default state');
+                }
+              },
+              child: ElevatedButton(
+                onPressed: () {
+                  //
+                  BlocProvider.of<CreateCatogeryBloc>(context).add(
+                      CreateCategory(
+                          categoryName: _categoryNameController.text));
+                },
+                child: Text('Create'),
+              ),
             ),
           ],
         ),

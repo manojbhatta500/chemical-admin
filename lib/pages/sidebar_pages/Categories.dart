@@ -1,23 +1,27 @@
+import 'dart:developer';
+
+import 'package:apiadmin/blocs/fetch_category/fetch_category_cubit.dart';
 import 'package:apiadmin/pages/sidebar_pages/add_category.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class Categories extends StatelessWidget {
-  final List<String> categories = [
-    'Category 1',
-    'Category 2',
-    'Category 3',
-    'Category 4',
-    'Category 5',
-    'Category 6',
-    'Category 7',
-    'Category 8',
-  ];
+class Categories extends StatefulWidget {
+  @override
+  State<Categories> createState() => _CategoriesState();
+}
+
+class _CategoriesState extends State<Categories> {
+  @override
+  void initState() {
+    BlocProvider.of<FetchCategoryCubit>(context).changeFetchCategoryState();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Categories'),
+        title: Text('Chemical Categories'),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -26,15 +30,38 @@ class Categories extends StatelessWidget {
         },
         child: Icon(Icons.add),
       ),
-      body: ListView.builder(
-        itemCount: categories.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(categories[index]),
-            onTap: () {
-              // Navigate to category details screen or perform other actions
-            },
-          );
+      body: BlocBuilder<FetchCategoryCubit, FetchCategoryState>(
+        builder: (context, state) {
+          switch (state.runtimeType) {
+            case FetchCategoryLoading:
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            case FetchCategoryFailed:
+              return Center(
+                child: Text('Failed to fetch data'),
+              );
+            case FetchCategorySuccess:
+              final data = state as FetchCategorySuccess;
+              return ListView.builder(
+                itemCount: data.categorydata.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    child: ListTile(
+                      title: Text(data.categorydata[index].name.toString()),
+                      onTap: () {
+                        log('Pressed ${data.categorydata[index].name.toString()}');
+                      },
+                    ),
+                  );
+                },
+              );
+            default:
+              // Handle the default case by returning a widget or null
+              return Center(
+                child: Text('Unhandled state: $state'),
+              );
+          }
         },
       ),
     );

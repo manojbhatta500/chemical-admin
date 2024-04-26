@@ -13,7 +13,7 @@ class HomePage extends StatelessWidget {
 }
 
 class SidebarXExampleApp extends StatelessWidget {
-  SidebarXExampleApp({Key? key}) : super(key: key);
+  SidebarXExampleApp({super.key});
 
   final _controller = SidebarXController(selectedIndex: 0, extended: true);
   final _key = GlobalKey<ScaffoldState>();
@@ -64,10 +64,9 @@ class SidebarXExampleApp extends StatelessWidget {
 
 class ExampleSidebarX extends StatelessWidget {
   const ExampleSidebarX({
-    Key? key,
+    super.key,
     required SidebarXController controller,
-  })  : _controller = controller,
-        super(key: key);
+  }) : _controller = controller;
 
   final SidebarXController _controller;
 
@@ -128,9 +127,9 @@ class ExampleSidebarX extends StatelessWidget {
       headerBuilder: (context, extended) {
         return SizedBox(
           height: 100,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(''),
+          child: CircleAvatar(
+            radius: 40,
+            child: Image.asset("assets/images/logo.png"),
           ),
         );
       },
@@ -179,9 +178,9 @@ class ExampleSidebarX extends StatelessWidget {
 
 class _ScreensExample extends StatelessWidget {
   const _ScreensExample({
-    Key? key,
+    super.key,
     required this.controller,
-  }) : super(key: key);
+  });
 
   final SidebarXController controller;
 
@@ -197,7 +196,7 @@ class _ScreensExample extends StatelessWidget {
             return Categories();
 
           case 1:
-            return AddChemicals();
+            return const AddChemicals();
 
           default:
             return Text(

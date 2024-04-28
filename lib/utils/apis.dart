@@ -4,4 +4,6 @@ class Apis {
   static String signInApi = '${baseurl}/auth/signin';
 
   static String createCategory = '${baseurl}/category/';
+
+  static String uploadPdfAPi = '${baseurl}/pdf/upload';
 }

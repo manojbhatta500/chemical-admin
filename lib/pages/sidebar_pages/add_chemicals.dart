@@ -35,7 +35,10 @@ class _AddChemicalsState extends State<AddChemicals> {
   String? pdfFileName;
 
   Future<PickedFileData?> pickPdf(BuildContext context) async {
-    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
+    final result = await FilePicker.platform.pickFiles(
+        allowMultiple: false,
+        type: FileType.custom,
+        allowedExtensions: ['pdf']);
     if (result != null) {
       PlatformFile file = result.files.first;
       return PickedFileData(file.name, file.bytes);

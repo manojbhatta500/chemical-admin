@@ -13,18 +13,18 @@ class UploadPdfCubit extends Cubit<UploadPdfState> {
     required String commonName,
     required String scientificName,
     required String categoryId,
-    required File file,
-    required File image,
+    required List<int> pdfbytes,
+    required List<int> imagebytes,
   }) async {
-    ChemicalRepository manager = ChemicalRepository();
+    ApiService manager = ApiService();
     emit(UploadPdfPending());
 
-    final repoResponse = await manager.postChemical(
+    final repoResponse = await manager.uploadData(
         commonName: commonName,
         scientificName: scientificName,
         categoryId: categoryId,
-        file: file,
-        image: image);
+        pdfBytes: pdfbytes,
+        imageBytes: imagebytes);
 
     if (repoResponse == true) {
       emit(UploadPdfSuccess());

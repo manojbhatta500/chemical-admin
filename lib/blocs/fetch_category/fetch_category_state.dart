@@ -10,7 +10,7 @@ sealed class FetchCategoryState extends Equatable {
 final class FetchCategoryInitial extends FetchCategoryState {}
 
 final class FetchCategorySuccess extends FetchCategoryState {
-  List<CategoryModel> categorydata;
+  final List<CategoryModel> categorydata;
   FetchCategorySuccess({required this.categorydata});
 }
 

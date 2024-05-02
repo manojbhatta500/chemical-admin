@@ -1,5 +1,7 @@
 import 'dart:developer';
+import 'package:apiadmin/blocs/fetch_category/fetch_category_cubit.dart';
 import 'package:apiadmin/blocs/upload_pdf/upload_pdf_cubit.dart';
+import 'package:apiadmin/models/category_model.dart';
 import 'package:apiadmin/reposiotory/add_chemical_repo.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +24,6 @@ class AddChemicals extends StatefulWidget {
 class _AddChemicalsState extends State<AddChemicals> {
   late TextEditingController commonNameController = TextEditingController();
   late TextEditingController scientificNameController = TextEditingController();
-  late TextEditingController categoryController = TextEditingController();
   late String selectedPdfPath = ''; // Store file paths instead of names
   late String selectedImagePath = '';
   PickedFileData? pdfData;
@@ -55,11 +56,30 @@ class _AddChemicalsState extends State<AddChemicals> {
   }
 
   @override
+  void initState() {
+    BlocProvider.of<FetchCategoryCubit>(context).changeFetchCategoryState();
+    super.initState();
+  }
+
+  @override
   void dispose() {
     commonNameController.dispose();
     scientificNameController.dispose();
     super.dispose();
   }
+
+  String? categoryName;
+  String? categoryID;
+  CategoryModel? categoryModel;
+
+  // List of items in our dropdown menu
+  var items = [
+    'Item 1',
+    'Item 2',
+    'Item 3',
+    'Item 4',
+    'Item 5',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -92,12 +112,35 @@ class _AddChemicalsState extends State<AddChemicals> {
                 ),
               ),
               const SizedBox(height: 20.0),
-              TextFormField(
-                controller: categoryController,
-                decoration: const InputDecoration(
-                  labelText: 'Category', // Change to 'Category'
-                  border: OutlineInputBorder(),
-                ),
+              BlocBuilder<FetchCategoryCubit, FetchCategoryState>(
+                builder: (context, state) {
+                  switch (state.runtimeType) {
+                    case FetchCategoryLoading:
+                      return Text('loading categories ....');
+                    case FetchCategoryFailed:
+                      return Text('data fetching  failed');
+                    case FetchCategorySuccess:
+                      final data = state as FetchCategorySuccess;
+                      return DropdownButton<CategoryModel>(
+                        value: categoryModel,
+                        icon: const Icon(Icons.keyboard_arrow_down),
+                        items: data.categorydata.map((items) {
+                          return DropdownMenuItem(
+                            value: items,
+                            child: Text(items.name!),
+                          );
+                        }).toList(),
+                        onChanged: (catData) {
+                          setState(() {
+                            categoryModel = catData;
+                            categoryID = categoryModel!.id;
+                          });
+                        },
+                      );
+                    default:
+                      return const Text('Loading...');
+                  }
+                },
               ),
               const SizedBox(height: 20.0),
               TextButton(
@@ -105,14 +148,14 @@ class _AddChemicalsState extends State<AddChemicals> {
                     pdfData = await pickPdf(context);
                   },
                   child: const Text("Select PDF")),
-              // _buildFileSelector(buttonText: 'Select PDF'),
+              pdfData!.bytes != null ? Text(pdfData!.fileName) : Text(""),
               const SizedBox(height: 20.0),
               TextButton(
                   onPressed: () async {
                     imageData = await pickImage(context);
                   },
                   child: const Text("Select Image")),
-              // _buildFileSelector(buttonText: 'Select Image'),
+              imageData!.bytes != null ? Text(imageData!.fileName) : Text(""),
               const SizedBox(height: 20.0),
               BlocListener<UploadPdfCubit, UploadPdfState>(
                 listener: (context, state) {
@@ -121,47 +164,33 @@ class _AddChemicalsState extends State<AddChemicals> {
                       log('this is UploadPdfPending');
                     case UploadPdfSuccess:
                       log("this is upload pdf success method");
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          backgroundColor: Colors.green,
+                          content: Text('Successfully posted chemical.')));
+                      commonNameController.clear();
+                      scientificNameController.clear();
+                    //categoryModel!.name = "";
+                    //pdfData!.bytes!.clear();
+                    //imageData!.bytes!.clear();
 
                     case UploadPdfFailed:
                       log("this is upload pdf failed");
-
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          backgroundColor: Colors.red,
+                          content: Text('Failed. Try again.')));
                     default:
                       log("this is default method");
                   }
                 },
                 child: ElevatedButton(
                   onPressed: () async {
-                    // PickedFileData? pdfData = await pickPdf(context);
-                    // PickedFileData? imageData = await pickImage(context);
-                    //ChemicalRepository repo = ChemicalRepository();
-
                     BlocProvider.of<UploadPdfCubit>(context).hitPostServer(
                       commonName: commonNameController.text,
                       scientificName: scientificNameController.text,
-                      categoryId: categoryController.text,
+                      categoryId: categoryID!,
                       imagebytes: imageData!.bytes!,
                       pdfbytes: pdfData!.bytes!,
                     );
-
-                    // ApiService service = ApiService();
-                    // if (pdfData != null || imageData != null) {
-                    //   bool success = await service.uploadData(
-                    //     commonName: commonNameController.text,
-                    //     scientificName: scientificNameController.text,
-                    //     categoryId: categoryController.text,
-                    //     imageBytes: imageData!.bytes!,
-                    //     pdfBytes: pdfData!.bytes!,
-                    //   );
-                    //   if (success) {
-                    //     // Upload successful
-                    //     log("success");
-                    //   } else {
-                    //     log("error");
-                    //   }
-                    // } else {
-                    //   log("no file picked");
-                    //   // No files picked
-                    // }
                   }, // Call submitData on button press
                   child: const Text('Post'),
                 ),

@@ -123,7 +123,10 @@ class _AddChemicalsState extends State<AddChemicals> {
                       final data = state as FetchCategorySuccess;
                       return DropdownButton<CategoryModel>(
                         value: categoryModel,
+                        hint: Text("Select Category"),
                         icon: const Icon(Icons.keyboard_arrow_down),
+                        underline: const SizedBox(),
+                        isExpanded: true,
                         items: data.categorydata.map((items) {
                           return DropdownMenuItem(
                             value: items,
@@ -146,16 +149,18 @@ class _AddChemicalsState extends State<AddChemicals> {
               TextButton(
                   onPressed: () async {
                     pdfData = await pickPdf(context);
+                    (context as Element).markNeedsBuild();
                   },
                   child: const Text("Select PDF")),
-              pdfData!.bytes != null ? Text(pdfData!.fileName) : Text(""),
+              pdfData?.bytes != null ? Text(pdfData!.fileName) : const Text(""),
               const SizedBox(height: 20.0),
               TextButton(
                   onPressed: () async {
                     imageData = await pickImage(context);
+                    (context as Element).markNeedsBuild();
                   },
                   child: const Text("Select Image")),
-              imageData!.bytes != null ? Text(imageData!.fileName) : Text(""),
+              imageData?.bytes != null ? Text(imageData!.fileName) : Text(""),
               const SizedBox(height: 20.0),
               BlocListener<UploadPdfCubit, UploadPdfState>(
                 listener: (context, state) {

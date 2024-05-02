@@ -174,9 +174,6 @@ class _AddChemicalsState extends State<AddChemicals> {
                           content: Text('Successfully posted chemical.')));
                       commonNameController.clear();
                       scientificNameController.clear();
-                    //categoryModel!.name = "";
-                    //pdfData!.bytes!.clear();
-                    //imageData!.bytes!.clear();
 
                     case UploadPdfFailed:
                       log("this is upload pdf failed");
@@ -196,7 +193,7 @@ class _AddChemicalsState extends State<AddChemicals> {
                       imagebytes: imageData!.bytes!,
                       pdfbytes: pdfData!.bytes!,
                     );
-                  }, // Call submitData on button press
+                  },
                   child: const Text('Post'),
                 ),
               ),

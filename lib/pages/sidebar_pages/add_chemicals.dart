@@ -1,15 +1,11 @@
 import 'dart:developer';
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:apiadmin/blocs/upload_pdf/upload_pdf_cubit.dart';
 import 'package:apiadmin/reposiotory/add_chemical_repo.dart';
-import 'package:file_picker/file_picker.dart'; // Import file_picker package
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'dart:typed_data';
-import 'dart:html' as html;
-import 'package:path_provider/path_provider.dart';
 
 class PickedFileData {
   final String fileName;
@@ -19,7 +15,7 @@ class PickedFileData {
 }
 
 class AddChemicals extends StatefulWidget {
-  const AddChemicals({Key? key}) : super(key: key);
+  const AddChemicals({super.key});
 
   @override
   State<AddChemicals> createState() => _AddChemicalsState();
@@ -253,16 +249,15 @@ class _AddChemicalsState extends State<AddChemicals> {
                 onPressed: () async {
                   // PickedFileData? pdfData = await pickPdf(context);
                   // PickedFileData? imageData = await pickImage(context);
-                  ChemicalRepository repo = ChemicalRepository();
+                  //ChemicalRepository repo = ChemicalRepository();
+                  ApiService service = ApiService();
                   if (pdfData != null || imageData != null) {
-                    bool success = await repo.uploadData(
-                      commonNameController.text,
-                      scientificNameController.text,
-                      categoryController.text,
-                      imageData!.bytes,
-                      pdfData!.bytes,
-                      imageData!.fileName ?? "",
-                      pdfData!.fileName ?? "",
+                    bool success = await service.uploadData(
+                      commonName: commonNameController.text,
+                      scientificName: scientificNameController.text,
+                      categoryId: categoryController.text,
+                      imageBytes: imageData!.bytes!,
+                      pdfBytes: pdfData!.bytes!,
                     );
                     if (success) {
                       // Upload successful

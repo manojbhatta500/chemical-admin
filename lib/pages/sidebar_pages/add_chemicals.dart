@@ -154,6 +154,11 @@ class _AddChemicalsState extends State<AddChemicals> {
                     pdfData = await pickPdf(context);
                     (context as Element).markNeedsBuild();
                   },
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.green,
+                    textStyle:
+                        const TextStyle(fontSize: 16.0), // Adjust font size
+                  ),
                   child: const Text("Select PDF")),
               pdfData?.bytes != null ? Text(pdfData!.fileName) : const Text(""),
               const SizedBox(height: 20.0),
@@ -162,6 +167,11 @@ class _AddChemicalsState extends State<AddChemicals> {
                     imageData = await pickImage(context);
                     (context as Element).markNeedsBuild();
                   },
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.green,
+                    textStyle:
+                        const TextStyle(fontSize: 16.0), // Adjust font size
+                  ),
                   child: const Text("Select Image")),
               imageData?.bytes != null ? Text(imageData!.fileName) : Text(""),
               const SizedBox(height: 20.0),
@@ -197,7 +207,13 @@ class _AddChemicalsState extends State<AddChemicals> {
                       pdfbytes: pdfData!.bytes!,
                     );
                   },
-                  child: const Text('Post'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                  ),
+                  child: const Text(
+                    'Post',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
             ],

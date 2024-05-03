@@ -47,8 +47,9 @@ class SignInScreen extends StatelessWidget {
                           MaterialPageRoute(builder: (context) => HomePage()));
 
                     case SignInFailed:
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Signup successfull')));
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          backgroundColor: Colors.red,
+                          content: Text('Try again')));
 
                     case SignInLoading:
                       log('this is signin loading state');
@@ -62,7 +63,13 @@ class SignInScreen extends StatelessWidget {
                     BlocProvider.of<SignInBloc>(context).add(OnSignInEvent(
                         userName: email.text, password: password.text));
                   },
-                  child: Text('Sign In'),
+                  child: Text(
+                    'Sign In',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                  ),
                 ),
               ),
               SizedBox(height: 10.0),

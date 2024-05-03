@@ -1,5 +1,6 @@
 import 'package:apiadmin/pages/sidebar_pages/Categories.dart';
 import 'package:apiadmin/pages/sidebar_pages/add_chemicals.dart';
+import 'package:apiadmin/pages/sidebar_pages/carsoul.dart';
 import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
 
@@ -145,20 +146,10 @@ class ExampleSidebarX extends StatelessWidget {
           icon: Icons.add_box,
           label: 'Add Chemicals',
         ),
-        // const SidebarXItem(
-        //   icon: Icons.people,
-        //   label: 'People',
-        // ),
-        // SidebarXItem(
-        //   icon: Icons.favorite,
-        //   label: 'Favorites',
-        //   selectable: false,
-        //   onTap: () => _showDisabledAlert(context),
-        // ),
-        // const SidebarXItem(
-        //   iconWidget: FlutterLogo(size: 20),
-        //   label: 'Flutter',
-        // ),
+        const SidebarXItem(
+          icon: Icons.photo,
+          label: 'Carasoule',
+        ),
       ],
     );
   }
@@ -198,6 +189,9 @@ class _ScreensExample extends StatelessWidget {
           case 1:
             return const AddChemicals();
 
+          case 2:
+            return const CarouselPage();
+
           default:
             return Text(
               pageTitle,
@@ -216,7 +210,7 @@ String _getTitleByIndex(int index) {
     case 1:
       return 'Add Chemicals';
     case 2:
-      return 'People';
+      return 'Carasoule';
     case 3:
       return 'Favorites';
     case 4:

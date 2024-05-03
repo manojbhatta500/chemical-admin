@@ -1,4 +1,5 @@
 import 'package:apiadmin/blocs/create_category/create_catogery_bloc.dart';
+import 'package:apiadmin/blocs/delete_category/delete_category_cubit.dart';
 import 'package:apiadmin/blocs/fetch_category/fetch_category_cubit.dart';
 import 'package:apiadmin/blocs/signin/sign_in_bloc.dart';
 import 'package:apiadmin/blocs/upload_pdf/upload_pdf_cubit.dart';
@@ -28,6 +29,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => UploadPdfCubit(),
+        ),
+        BlocProvider(
+          create: (context) => DeleteCategoryCubit(),
         ),
       ],
       child: MaterialApp(

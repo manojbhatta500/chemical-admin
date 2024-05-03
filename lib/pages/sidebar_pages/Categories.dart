@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:apiadmin/blocs/fetch_category/fetch_category_cubit.dart';
 import 'package:apiadmin/pages/sidebar_pages/add_category.dart';
+import 'package:apiadmin/utils/deletebutton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -43,19 +44,29 @@ class _CategoriesState extends State<Categories> {
               );
             case FetchCategorySuccess:
               final data = state as FetchCategorySuccess;
-              return ListView.builder(
-                itemCount: data.categorydata.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                    child: ListTile(
-                      title: Text(data.categorydata[index].name.toString()),
-                      onTap: () {
-                        log('Pressed ${data.categorydata[index].name.toString()}');
-                      },
-                    ),
-                  );
-                },
-              );
+              if (data.categorydata.length > 0) {
+                return ListView.builder(
+                  itemCount: data.categorydata.length,
+                  itemBuilder: (context, index) {
+                    return Card(
+                      child: ListTile(
+                        title: Text(data.categorydata[index].name.toString()),
+                        trailing: DeleteButton(
+                          id: data.categorydata[index].id!,
+                        ),
+                        onTap: () {
+                          log('Pressed ${data.categorydata[index].name.toString()}');
+                        },
+                      ),
+                    );
+                  },
+                );
+              } else {
+                return Center(
+                  child: Text("No categories found in server."),
+                );
+              }
+
             default:
               // Handle the default case by returning a widget or null
               return Center(

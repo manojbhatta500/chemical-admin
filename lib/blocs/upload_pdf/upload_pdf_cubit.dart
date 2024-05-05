@@ -13,6 +13,7 @@ class UploadPdfCubit extends Cubit<UploadPdfState> {
     required String commonName,
     required String scientificName,
     required String categoryId,
+    required String disc,
     required List<int> pdfbytes,
     required List<int> imagebytes,
   }) async {
@@ -23,6 +24,7 @@ class UploadPdfCubit extends Cubit<UploadPdfState> {
         commonName: commonName,
         scientificName: scientificName,
         categoryId: categoryId,
+        desc: disc,
         pdfBytes: pdfbytes,
         imageBytes: imagebytes);
 

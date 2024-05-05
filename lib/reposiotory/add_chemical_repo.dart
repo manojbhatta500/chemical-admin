@@ -16,6 +16,7 @@ class ApiService {
     required String commonName,
     required String scientificName,
     required String categoryId,
+    required String desc,
     required List<int> pdfBytes,
     required List<int> imageBytes,
   }) async {
@@ -26,6 +27,7 @@ class ApiService {
       'commonName': commonName,
       'scientificName': scientificName,
       'categoryId': categoryId,
+      'description': desc,
       'file': MultipartFile.fromBytes(
         pdfBytes,
         filename: 'my_pdf.pdf', // Optional filename

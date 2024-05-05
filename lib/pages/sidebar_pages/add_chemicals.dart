@@ -24,6 +24,8 @@ class AddChemicals extends StatefulWidget {
 class _AddChemicalsState extends State<AddChemicals> {
   late TextEditingController commonNameController = TextEditingController();
   late TextEditingController scientificNameController = TextEditingController();
+  TextEditingController _descriptionController = TextEditingController();
+
   late String selectedPdfPath = ''; // Store file paths instead of names
   late String selectedImagePath = '';
   PickedFileData? pdfData;
@@ -95,128 +97,151 @@ class _AddChemicalsState extends State<AddChemicals> {
         padding: EdgeInsets.symmetric(horizontal: 0.2 * width),
         child: SizedBox(
           width: MediaQuery.of(context).size.width * 0.8,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextFormField(
-                controller: commonNameController,
-                decoration: const InputDecoration(
-                  labelText: 'Common Name',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 20.0),
-              TextFormField(
-                controller: scientificNameController,
-                decoration: const InputDecoration(
-                  labelText: 'Scientific Name',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 20.0),
-              BlocBuilder<FetchCategoryCubit, FetchCategoryState>(
-                builder: (context, state) {
-                  switch (state.runtimeType) {
-                    case FetchCategoryLoading:
-                      return Text('loading categories ....');
-                    case FetchCategoryFailed:
-                      return Text('data fetching  failed');
-                    case FetchCategorySuccess:
-                      final data = state as FetchCategorySuccess;
-                      return DropdownButton<CategoryModel>(
-                        value: categoryModel,
-                        hint: Text("Select Category"),
-                        icon: const Icon(Icons.keyboard_arrow_down),
-                        underline: const SizedBox(),
-                        isExpanded: true,
-                        items: data.categorydata.map((items) {
-                          return DropdownMenuItem(
-                            value: items,
-                            child: Text(items.name!),
-                          );
-                        }).toList(),
-                        onChanged: (catData) {
-                          setState(() {
-                            categoryModel = catData;
-                            categoryID = categoryModel!.id;
-                          });
-                        },
-                      );
-                    default:
-                      return const Text('Loading...');
-                  }
-                },
-              ),
-              const SizedBox(height: 20.0),
-              TextButton(
-                  onPressed: () async {
-                    pdfData = await pickPdf(context);
-                    (context as Element).markNeedsBuild();
-                  },
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.green,
-                    textStyle:
-                        const TextStyle(fontSize: 16.0), // Adjust font size
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextFormField(
+                  controller: commonNameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Common Name',
+                    border: OutlineInputBorder(),
                   ),
-                  child: const Text("Select PDF")),
-              pdfData?.bytes != null ? Text(pdfData!.fileName) : const Text(""),
-              const SizedBox(height: 20.0),
-              TextButton(
-                  onPressed: () async {
-                    imageData = await pickImage(context);
-                    (context as Element).markNeedsBuild();
-                  },
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.green,
-                    textStyle:
-                        const TextStyle(fontSize: 16.0), // Adjust font size
+                ),
+                const SizedBox(height: 20.0),
+                TextFormField(
+                  controller: scientificNameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Scientific Name',
+                    border: OutlineInputBorder(),
                   ),
-                  child: const Text("Select Image")),
-              imageData?.bytes != null ? Text(imageData!.fileName) : Text(""),
-              const SizedBox(height: 20.0),
-              BlocListener<UploadPdfCubit, UploadPdfState>(
-                listener: (context, state) {
-                  switch (state.runtimeType) {
-                    case UploadPdfPending:
-                      log('this is UploadPdfPending');
-                    case UploadPdfSuccess:
-                      log("this is upload pdf success method");
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          backgroundColor: Colors.green,
-                          content: Text('Successfully posted chemical.')));
-                      commonNameController.clear();
-                      scientificNameController.clear();
+                ),
+                Text(
+                  'Enter Description:',
+                  style: TextStyle(
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 10.0),
+                TextFormField(
+                  controller: _descriptionController,
+                  maxLines: 3,
+                  decoration: InputDecoration(
+                    hintText: 'Type your description here...',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
+                BlocBuilder<FetchCategoryCubit, FetchCategoryState>(
+                  builder: (context, state) {
+                    switch (state.runtimeType) {
+                      case FetchCategoryLoading:
+                        return Text('loading categories ....');
+                      case FetchCategoryFailed:
+                        return Text('data fetching  failed');
+                      case FetchCategorySuccess:
+                        final data = state as FetchCategorySuccess;
+                        return DropdownButton<CategoryModel>(
+                          value: categoryModel,
+                          hint: Text("Select Category"),
+                          icon: const Icon(Icons.keyboard_arrow_down),
+                          underline: const SizedBox(),
+                          isExpanded: true,
+                          items: data.categorydata.map((items) {
+                            return DropdownMenuItem(
+                              value: items,
+                              child: Text(items.name!),
+                            );
+                          }).toList(),
+                          onChanged: (catData) {
+                            setState(() {
+                              categoryModel = catData;
+                              categoryID = categoryModel!.id;
+                            });
+                          },
+                        );
+                      default:
+                        return const Text('Loading...');
+                    }
+                  },
+                ),
+                const SizedBox(height: 20.0),
+                TextButton(
+                    onPressed: () async {
+                      pdfData = await pickPdf(context);
+                      (context as Element).markNeedsBuild();
+                    },
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.green,
+                      textStyle:
+                          const TextStyle(fontSize: 16.0), // Adjust font size
+                    ),
+                    child: const Text("Select PDF")),
+                pdfData?.bytes != null
+                    ? Text(pdfData!.fileName)
+                    : const Text(""),
+                const SizedBox(height: 20.0),
+                TextButton(
+                    onPressed: () async {
+                      imageData = await pickImage(context);
+                      (context as Element).markNeedsBuild();
+                    },
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.green,
+                      textStyle:
+                          const TextStyle(fontSize: 16.0), // Adjust font size
+                    ),
+                    child: const Text("Select Image")),
+                imageData?.bytes != null ? Text(imageData!.fileName) : Text(""),
+                const SizedBox(height: 20.0),
+                BlocListener<UploadPdfCubit, UploadPdfState>(
+                  listener: (context, state) {
+                    switch (state.runtimeType) {
+                      case UploadPdfPending:
+                        log('this is UploadPdfPending');
+                      case UploadPdfSuccess:
+                        log("this is upload pdf success method");
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: Colors.green,
+                            content: Text('Successfully posted chemical.')));
+                        commonNameController.clear();
+                        scientificNameController.clear();
+                        _descriptionController.clear();
 
-                    case UploadPdfFailed:
-                      log("this is upload pdf failed");
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          backgroundColor: Colors.red,
-                          content: Text('Failed. Try again.')));
-                    default:
-                      log("this is default method");
-                  }
-                },
-                child: ElevatedButton(
-                  onPressed: () async {
-                    BlocProvider.of<UploadPdfCubit>(context).hitPostServer(
-                      commonName: commonNameController.text,
-                      scientificName: scientificNameController.text,
-                      categoryId: categoryID!,
-                      imagebytes: imageData!.bytes!,
-                      pdfbytes: pdfData!.bytes!,
-                    );
+                      case UploadPdfFailed:
+                        log("this is upload pdf failed");
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: Colors.red,
+                            content: Text('Failed. Try again.')));
+                      default:
+                        log("this is default method");
+                    }
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                  ),
-                  child: const Text(
-                    'Post',
-                    style: TextStyle(color: Colors.white),
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      BlocProvider.of<UploadPdfCubit>(context).hitPostServer(
+                        commonName: commonNameController.text,
+                        scientificName: scientificNameController.text,
+                        categoryId: categoryID!,
+                        disc: _descriptionController.text,
+                        imagebytes: imageData!.bytes!,
+                        pdfbytes: pdfData!.bytes!,
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                    ),
+                    child: const Text(
+                      'Post',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

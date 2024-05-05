@@ -6,4 +6,6 @@ class Apis {
   static String createCategory = '${baseurl}/category/';
 
   static String uploadPdfAPi = '${baseurl}/pdf/upload';
+
+  static String uploadBanner = '${baseurl}/banner/';
 }

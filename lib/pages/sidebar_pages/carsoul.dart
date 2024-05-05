@@ -27,6 +27,8 @@ class _CarouselPageState extends State<CarouselPage> {
     }
   }
 
+  // yes
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -198,48 +198,59 @@ class _AddChemicalsState extends State<AddChemicals> {
                 imageData?.bytes != null ? Text(imageData!.fileName) : Text(""),
                 const SizedBox(height: 20.0),
                 BlocListener<UploadPdfCubit, UploadPdfState>(
-                  listener: (context, state) {
-                    switch (state.runtimeType) {
-                      case UploadPdfPending:
-                        log('this is UploadPdfPending');
-                      case UploadPdfSuccess:
-                        log("this is upload pdf success method");
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            backgroundColor: Colors.green,
-                            content: Text('Successfully posted chemical.')));
-                        commonNameController.clear();
-                        scientificNameController.clear();
-                        _descriptionController.clear();
+                    listener: (context, state) {
+                      switch (state.runtimeType) {
+                        case UploadPdfPending:
+                          log('this is UploadPdfPending');
+                        case UploadPdfSuccess:
+                          log("this is upload pdf success method");
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              backgroundColor: Colors.green,
+                              content: Text('Successfully posted chemical.')));
+                          commonNameController.clear();
+                          scientificNameController.clear();
+                          _descriptionController.clear();
 
-                      case UploadPdfFailed:
-                        log("this is upload pdf failed");
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            backgroundColor: Colors.red,
-                            content: Text('Failed. Try again.')));
-                      default:
-                        log("this is default method");
-                    }
-                  },
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      BlocProvider.of<UploadPdfCubit>(context).hitPostServer(
-                        commonName: commonNameController.text,
-                        scientificName: scientificNameController.text,
-                        categoryId: categoryID!,
-                        disc: _descriptionController.text,
-                        imagebytes: imageData!.bytes!,
-                        pdfbytes: pdfData!.bytes!,
-                      );
+                        case UploadPdfFailed:
+                          log("this is upload pdf failed");
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              backgroundColor: Colors.red,
+                              content: Text('Failed. Try again.')));
+                        default:
+                          log("this is default method");
+                      }
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                    ),
-                    child: const Text(
-                      'Post',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        // Validate input fields
+                        if (commonNameController.text.isEmpty ||
+                            scientificNameController.text.isEmpty ||
+                            categoryID == null ||
+                            _descriptionController.text.isEmpty ||
+                            imageData == null ||
+                            pdfData == null) {
+                          // Display error message or handle validation failure
+                          return; // Don't proceed if validation fails
+                        }
+
+                        // If all fields are filled, proceed with posting
+                        BlocProvider.of<UploadPdfCubit>(context).hitPostServer(
+                          commonName: commonNameController.text,
+                          scientificName: scientificNameController.text,
+                          categoryId: categoryID!,
+                          disc: _descriptionController.text,
+                          imagebytes: imageData!.bytes!,
+                          pdfbytes: pdfData!.bytes!,
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                      ),
+                      child: const Text(
+                        'Post',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    )),
               ],
             ),
           ),

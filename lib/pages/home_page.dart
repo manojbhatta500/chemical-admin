@@ -190,7 +190,7 @@ class _ScreensExample extends StatelessWidget {
             return const AddChemicals();
 
           case 2:
-            return const CarouselPage();
+            return const CarasoulePage();
 
           default:
             return Text(
@@ -210,7 +210,7 @@ String _getTitleByIndex(int index) {
     case 1:
       return 'Add Chemicals';
     case 2:
-      return 'Carasoule';
+      return 'Banner';
     case 3:
       return 'Favorites';
     case 4:

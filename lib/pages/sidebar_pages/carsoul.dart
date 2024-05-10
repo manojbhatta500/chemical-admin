@@ -68,7 +68,7 @@ class _CarasoulePageState extends State<CarasoulePage> {
           label: const Row(
             children: [
               Text(
-                'Upload Banner',
+                'Add Banner',
                 style: TextStyle(fontSize: 18, color: Colors.black),
               ),
               SizedBox(

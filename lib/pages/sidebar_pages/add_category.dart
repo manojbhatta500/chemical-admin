@@ -13,7 +13,7 @@ class AddCategory extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Category'),
+        title: const Text('Add Category'),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 0.2 * width),
@@ -23,7 +23,7 @@ class AddCategory extends StatelessWidget {
           children: [
             TextField(
               controller: _categoryNameController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Category Name',
                 border: OutlineInputBorder(),
               ),

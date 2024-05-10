@@ -6,6 +6,8 @@ import 'package:apiadmin/utils/deletebutton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../signin_page.dart';
+
 class Categories extends StatefulWidget {
   @override
   State<Categories> createState() => _CategoriesState();
@@ -22,7 +24,20 @@ class _CategoriesState extends State<Categories> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chemical Categories'),
+        title: const Text('Chemical Categories'),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => SignInScreen()),
+                    (route) => false);
+              },
+              icon: const Icon(
+                Icons.logout,
+                color: Colors.red,
+              )),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -35,11 +50,11 @@ class _CategoriesState extends State<Categories> {
         builder: (context, state) {
           switch (state.runtimeType) {
             case FetchCategoryLoading:
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             case FetchCategoryFailed:
-              return Center(
+              return const Center(
                 child: Text('Failed to fetch data'),
               );
             case FetchCategorySuccess:
@@ -62,7 +77,7 @@ class _CategoriesState extends State<Categories> {
                   },
                 );
               } else {
-                return Center(
+                return const Center(
                   child: Text("No categories found in server."),
                 );
               }

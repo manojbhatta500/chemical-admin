@@ -1,6 +1,7 @@
 import 'package:apiadmin/pages/sidebar_pages/Categories.dart';
 import 'package:apiadmin/pages/sidebar_pages/add_chemicals.dart';
 import 'package:apiadmin/pages/sidebar_pages/carsoul.dart';
+import 'package:apiadmin/pages/signin_page.dart';
 import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
 
@@ -148,7 +149,7 @@ class ExampleSidebarX extends StatelessWidget {
         ),
         const SidebarXItem(
           icon: Icons.photo,
-          label: 'Carasoule',
+          label: 'Banner',
         ),
       ],
     );
@@ -185,10 +186,8 @@ class _ScreensExample extends StatelessWidget {
         switch (controller.selectedIndex) {
           case 0:
             return Categories();
-
           case 1:
             return const AddChemicals();
-
           case 2:
             return const CarasoulePage();
 

@@ -1,5 +1,6 @@
 class Apis {
-  static String baseurl = 'https://chem-production-69ec.up.railway.app/api/v1';
+  static String baseurl =
+      'https://riddhisoft.appointmentnepal.xyz/plantbg/api/v1';
 
   static String signInApi = '${baseurl}/auth/signin';
 
